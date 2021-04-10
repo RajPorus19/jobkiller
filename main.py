@@ -21,7 +21,7 @@ for i in parse:
     if i.startswith("jobmap["):
         print(i,'\n')
 
-def get_indeed_jobs_html(jobtitle,location,pageNum);
+def get_indeed_jobs_html(jobtitle,location,pageNum):
     url = 'https://fr.indeed.com/jobs?q={}&l={}&start={}/'.format(jobtitle,location,pageNum)
     r = requests.get(url)
     html_bytes = r.text
@@ -41,3 +41,21 @@ def parse_indeed_jobs_list(indeedSoup):
             jobmapsFromHtml.append(line)
 
     return jobmapsFromHtml
+
+def jobmap_to_json(jobmapString):
+
+    indexOfEqualSign = jobmapString.find("=")
+    indexOfSemiColon = jobmapString.rfind(";")
+    
+    jobmapJsonStr = jobmapString[indexOfEqualSign + 1 : indexOfSemiColon]
+
+    jobmapJson = json.loads(jobmapJsonStr)
+    return jobmapJson
+
+def all_indeed_jobs_json(jobmapsFromHtml):
+    indeedJson = json.loads("{}")
+    for jobmapStr in jobmapsFromHtml:
+        jobmapJson = jobmap_to_json(jobmapStr)
+        if jobmapJson not in indeedJson["jobs"]:
+            indeedJson["jobs"] += jobmapJson
+    return indeedJson
