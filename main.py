@@ -20,14 +20,13 @@ for script in scripts:
 for i in parse:
     if i.startswith("jobmap["):
         pass
-        #print(i,'\n')
 
 def main():
     soup = get_indeed_jobs_html("informatique","Île-de-France",10)
     jobmapsFromHtml = parse_indeed_jobs_list(soup)
-    print(jobmapsFromHtml)
     indeedJson = all_indeed_jobs_json(jobmapsFromHtml)
-    print(indeedJson)
+    print("final output:",indeedJson[0])
+    print("final num:",len(indeedJson))
 
 def get_indeed_jobs_html(jobtitle,location,pageNum):
     url = 'https://fr.indeed.com/jobs?q={}&l={}&start={}/'.format(jobtitle,location,pageNum)
@@ -41,11 +40,10 @@ def parse_indeed_jobs_list(indeedSoup):
     flag = "jobmap = {};"
     jobmapsFromHtml = []
     parsedScript = ""
-    print(scriptTags)
 
     for script in scriptTags:
-        if flag in script:
-            parsedScript = script.split("\n")
+        if flag in str(script):
+            parsedScript = str(script).split("\n")
     for line in parsedScript:
         if line.startswith("jobmap["):
             jobmapsFromHtml.append(line)
@@ -57,17 +55,42 @@ def jobmap_to_json(jobmapString):
     indexOfEqualSign = jobmapString.find("=")
     indexOfSemiColon = jobmapString.rfind(";")
     
-    jobmapJsonStr = jobmapString[indexOfEqualSign + 1 : indexOfSemiColon]
+    jobmapJsonStr = jobmapString[indexOfEqualSign + 2 : indexOfSemiColon]
+    jobmapJsonStr = double_quote_json_fields(jobmapJsonStr)
 
     jobmapJson = json.loads(jobmapJsonStr)
     return jobmapJson
 
+def double_quote_json_fields(jsonStr):
+    jsonStr = str(jsonStr)
+    jsonStr = jsonStr.replace("jk", '"jk"')
+    fields = [
+            "efccid",
+            "srcid",
+            "cmpid",
+            "num",
+            "srcname",
+            "cmp",
+            "cmpesc",
+            "cmplnk",
+            "loc",
+            "country",
+            "zip",
+            "city",
+            "title",
+            "locid",
+            "rd"]
+
+    for field in fields:
+        jsonStr = jsonStr.replace(","+field+":", ',"'+field+'":')
+    return jsonStr.replace("'",'"')
+
 def all_indeed_jobs_json(jobmapsFromHtml):
-    indeedJson = json.loads("{}")
-    for jobmapStr in jobmapsFromHtml:
+    indeedJson = []
+    for jobmapStr in jobmapsFromHtml: 
         jobmapJson = jobmap_to_json(jobmapStr)
-        if jobmapJson not in indeedJson["jobs"]:
-            indeedJson["jobs"] += jobmapJson
+        if jobmapJson not in indeedJson:
+            indeedJson.append(jobmapJson)
     return indeedJson
 
 main()
