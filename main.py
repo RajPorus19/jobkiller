@@ -19,7 +19,15 @@ for script in scripts:
 
 for i in parse:
     if i.startswith("jobmap["):
-        print(i,'\n')
+        pass
+        #print(i,'\n')
+
+def main():
+    soup = get_indeed_jobs_html("informatique","Île-de-France",10)
+    jobmapsFromHtml = parse_indeed_jobs_list(soup)
+    print(jobmapsFromHtml)
+    indeedJson = all_indeed_jobs_json(jobmapsFromHtml)
+    print(indeedJson)
 
 def get_indeed_jobs_html(jobtitle,location,pageNum):
     url = 'https://fr.indeed.com/jobs?q={}&l={}&start={}/'.format(jobtitle,location,pageNum)
@@ -32,6 +40,8 @@ def parse_indeed_jobs_list(indeedSoup):
     scriptTags = indeedSoup.find_all("script")
     flag = "jobmap = {};"
     jobmapsFromHtml = []
+    parsedScript = ""
+    print(scriptTags)
 
     for script in scriptTags:
         if flag in script:
@@ -59,3 +69,5 @@ def all_indeed_jobs_json(jobmapsFromHtml):
         if jobmapJson not in indeedJson["jobs"]:
             indeedJson["jobs"] += jobmapJson
     return indeedJson
+
+main()
