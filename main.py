@@ -3,21 +3,41 @@ import requests
 import json
 from lxml import html
 from pprint import pprint
-
 import re
 
-
-
 url = 'https://fr.indeed.com/jobs?q=informatique&l=Île-de-France&start=10/'
-#r = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36"})
 r = requests.get(url)
 html_bytes = r.text
 soup = bs4(html_bytes, 'lxml')
 
+scripts = soup.find_all("script")
+flag = "jobmap = {};"
 
-pattern = re.compile(r"swc_market_lists\s+=\s+(\{.*?\})")
-script = soup.find("script", text=pattern)
+for script in scripts:
+    if flag in str(script):
+        parse = str(script).split("\n")
 
-pprint(soup)
+for i in parse:
+    if i.startswith("jobmap["):
+        print(i,'\n')
 
+def get_indeed_jobs_html(jobtitle,location,pageNum);
+    url = 'https://fr.indeed.com/jobs?q={}&l={}&start={}/'.format(jobtitle,location,pageNum)
+    r = requests.get(url)
+    html_bytes = r.text
+    indeedSoup = bs4(html_bytes, 'lxml')
+    return indeedSoup 
 
+def parse_indeed_jobs_list(indeedSoup):
+    scriptTags = indeedSoup.find_all("script")
+    flag = "jobmap = {};"
+    jobmapsFromHtml = []
+
+    for script in scriptTags:
+        if flag in script:
+            parsedScript = script.split("\n")
+    for line in parsedScript:
+        if line.startswith("jobmap["):
+            jobmapsFromHtml.append(line)
+
+    return jobmapsFromHtml
