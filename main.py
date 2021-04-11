@@ -25,8 +25,9 @@ def main():
     soup = get_indeed_jobs_html("informatique","Île-de-France",10)
     jobmapsFromHtml = parse_indeed_jobs_list(soup)
     indeedJson = all_indeed_jobs_json(jobmapsFromHtml)
-    print("final output:",indeedJson[0])
-    print("final num:",len(indeedJson))
+    pprint(indeedJson[3])
+    print(jobmap_json_to_link(indeedJson[3],"https://fr.indeed.com/emplois"))
+    # TODO add this later as global variable somewhere (applies only for french webpage)
 
 def get_indeed_jobs_html(jobtitle,location,pageNum):
     url = 'https://fr.indeed.com/jobs?q={}&l={}&start={}/'.format(jobtitle,location,pageNum)
@@ -92,5 +93,12 @@ def all_indeed_jobs_json(jobmapsFromHtml):
         if jobmapJson not in indeedJson:
             indeedJson.append(jobmapJson)
     return indeedJson
+
+def jobmap_json_to_link(jobmapJson,indeedQueryUrl):
+    id = jobmapJson["jk"]
+    company = jobmapJson["cmp"]
+    link = indeedQueryUrl + "?q={}&vjk={}".format(company,id)
+    return link
+
 
 main()
