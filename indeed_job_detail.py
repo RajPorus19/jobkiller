@@ -26,22 +26,61 @@ def fetchIndeedJobDetailJson(url):
         "extraRewards":"",
         "cursusRequirements":"",
         "remoteWork":"",
-        "safetyMeasures":""
+        "safetyMeasures":"",
+        "salary":"",
+        "workplace":"",
+        "contractType":""
     }
     '''
     jobJson = json.loads(jsonTemplate)
 
-    if jobFromIndeed(soup):
-        jobJson["jobDesc"] = fillJobDescWithAllTags(soup)
+    if isJobFromIndeed(soup):
+        jobJson = fillJsonWithCorrectTags(jobJson,soup)
+    else:
+        jobJson[jobDesc] = fillJobDescWithAllTags(soup)
 
     return jobJson
+    #return getJobInfoList(soup)
 
 
-def jobFromIndeed(soup):
+
+def isJobFromIndeed(soup):
     spanTag = "<span>Postuler</span>"
     if spanTag in str(soup): 
         return True
     return False
+
+def fillJobDescWithAllTags(soup):
+    allTags = getJobInfoList(soup)
+    return "\n".join(allTags)
+
+def fillJsonWithCorrectTags(jobDetailJson,soup):
+    pTagsFrenchAndItsField = {
+            "Avantages":"advantages",
+            "Horaires":"workHours",
+            "Rémunération":"extraRewards",
+            "Formation":"cursusRequirements",
+            "Télétravail":"remoteWork",
+            "Précautions":"safetyMeasures",
+            "Salaire":"salary",
+            "Lieu de travail":"workplace",
+            "Type d'emploi":"contractType"
+    }
+    jobInfoList = getJobInfoList(soup)
+    currentField = "jobDesc"
+    for info in jobInfoList:
+        for pTag, field in pTagsFrenchAndItsField.items():
+            info = unicodedata.normalize("NFKD",info)
+            pTag = unicodedata.normalize("NFKD",pTag)
+            if info.startswith(pTag):
+                currentField = field
+                break
+
+        jobDetailJson[currentField] += info + "\n"
+
+    return jobDetailJson
+
+
 
 def getJobInfoList(soup):
     textList = []
@@ -53,8 +92,5 @@ def getJobInfoList(soup):
             textList.append(childText)
     return textList
 
-def fillJobDescWithAllTags(soup):
-    jobDescDiv = soup.find("div", {"id":"jobDescriptionText"})
-    return unicodedata.normalize("NFKD",jobDescDiv.text)
 
-print(fetchIndeedJobDetailJson(url))
+pprint(fetchIndeedJobDetailJson(url))
