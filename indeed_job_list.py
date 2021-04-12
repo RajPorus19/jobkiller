@@ -2,32 +2,13 @@ from bs4 import BeautifulSoup as bs4
 import requests
 import json
 from lxml import html
-from pprint import pprint
-import re
-
-url = 'https://fr.indeed.com/jobs?q=informatique&l=Île-de-France&start=10/'
-r = requests.get(url)
-html_bytes = r.text
-soup = bs4(html_bytes, 'lxml')
-
-scripts = soup.find_all("script")
-flag = "jobmap = {};"
-
-for script in scripts:
-    if flag in str(script):
-        parse = str(script).split("\n")
-
-for i in parse:
-    if i.startswith("jobmap["):
-        pass
 
 def main():
     soup = get_indeed_jobs_html("informatique","Île-de-France",10)
     jobmapsFromHtml = parse_indeed_jobs_list(soup)
     indeedJson = all_indeed_jobs_json(jobmapsFromHtml)
-    pprint(indeedJson[3])
-    print(jobmap_json_to_link(indeedJson[3],"https://fr.indeed.com/emplois"))
-    # TODO add this later as global variable somewhere (applies only for french webpage)
+    return jobmap_json_to_link(indeedJson[3],"https://fr.indeed.com/voir-emploi")
+
 
 def get_indeed_jobs_html(jobtitle,location,pageNum):
     url = 'https://fr.indeed.com/jobs?q={}&l={}&start={}/'.format(jobtitle,location,pageNum)
@@ -97,7 +78,9 @@ def all_indeed_jobs_json(jobmapsFromHtml):
 def jobmap_json_to_link(jobmapJson,indeedQueryUrl):
     id = jobmapJson["jk"]
     company = jobmapJson["cmp"]
-    link = indeedQueryUrl + "?q={}&vjk={}".format(company,id)
+    jobtitle = jobmapJson["title"]
+    link = indeedQueryUrl + "?q={}&t={}&jk={}".format(company,jobtitle,id)
+    link = link.replace(" ","+")
     return link
 
 
