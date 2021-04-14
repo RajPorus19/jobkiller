@@ -5,6 +5,20 @@ from lxml import html
 from pprint import pprint
 import indeed_job_list
 import unicodedata
+from job import Job
+
+def turnIndeedJobIntoJobOject(indeedJobUrl):
+    jobmapJson = fetchIndeedJobDetailJson(indeedJobUrl)
+    jobTitle = "title"
+    companyName = "cmp"
+    datePublished = "today"
+    status = "not applied"
+    jobUrl = indeedJobUrl
+    recruiterEmail = "recruiter@gmail.com"
+    job = Job(jobTitle, companyName, datePublished, status, jobUrl, recruiterEmail)
+    return job
+
+
 
 def fetchIndeedJobDetailJson(url):
     r = requests.get(url)
@@ -80,4 +94,5 @@ def fillJsonWithCorrectTags(jobDetailJson,soup):
 
     return jobDetailJson
 
-
+url = "https://fr.indeed.com/voir-emploi?q=R&D+Vision&t=D%C3%A9veloppeurs(ses)+informatique&jk=3fc9219d69b065f4"
+print(turnIndeedJobIntoJobOject(url).status)
