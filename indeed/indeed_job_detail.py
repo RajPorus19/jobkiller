@@ -5,7 +5,7 @@ from lxml import html
 from pprint import pprint
 import indeed_job_list
 import unicodedata
-from models.job import Job
+from job import Job
 
 def turnIndeedJobIntoJobOject(indeedJobUrl):
     jobmapJson = fetchIndeedJobDetailJson(indeedJobUrl)

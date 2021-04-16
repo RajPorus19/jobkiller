@@ -3,11 +3,11 @@ import requests
 import json
 from lxml import html
 
-def main():
-    soup = get_indeed_jobs_html("informatique","Île-de-France",10)
+def main(searchQuery,location,pageNum):
+    soup = get_indeed_jobs_html(searchQuery,location,pageNum)
     jobmapsFromHtml = parse_indeed_jobs_list(soup)
     indeedJson = all_indeed_jobs_json(jobmapsFromHtml)
-    return jobmap_json_to_link(indeedJson[3],"https://fr.indeed.com/voir-emploi")
+    return indeedJson
 
 
 def get_indeed_jobs_html(jobtitle,location,pageNum):
@@ -84,4 +84,3 @@ def jobmap_json_to_link(jobmapJson,indeedQueryUrl):
     return link
 
 
-main()
