@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QListWidget
 from PyQt5.QtGui import QIcon
 from indeed.indeed_job_list import main as IndeedJobsSearch
 
@@ -19,6 +19,8 @@ class App(QWidget):
         self.textbox = QLineEdit(self)
         self.textbox.move(10, 10)
         self.textbox.resize(280,40)
+        self.ql = QListWidget(self)
+        self.ql.move(400,400)
         self.initUI()
         
     def initUI(self):
@@ -27,9 +29,11 @@ class App(QWidget):
         self.show()
 
     def printJobs(self):
+        self.ql.clear()
         jobs = IndeedJobsSearch(self.textbox.text(),"Île-de-France",0)
         for i in jobs:
             print(i["title"])
+            self.ql.addItem(i["title"])
     
 if __name__ == '__main__':
     app = QApplication(sys.argv)
