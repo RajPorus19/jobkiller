@@ -17,8 +17,7 @@ def turnIndeedJobIntoJobOject(indeedJobUrl):
     status = "not applied"
     jobUrl = indeedJobUrl
     recruiterEmail = "recruiter@gmail.com"
-    #job = Job(jobTitle, companyName, datePublished, status, jobUrl, recruiterEmail)
-    job = "dummy data"
+    job = Job(jobTitle, companyName, datePublished, status, jobUrl, recruiterEmail)
     return job
 
 
