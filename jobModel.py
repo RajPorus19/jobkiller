@@ -7,3 +7,4 @@ class Job:
         self.status = status
         self.jobUrl = jobUrl
         self.recruiterEmail = recruiterEmail
+

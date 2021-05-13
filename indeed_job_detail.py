@@ -5,9 +5,11 @@ from lxml import html
 from pprint import pprint
 import indeed_job_list
 import unicodedata
-from models.job import Job
+
+
 
 def turnIndeedJobIntoJobOject(indeedJobUrl):
+    # returns dummy model instead of a real Job object from jobmapJson
     jobmapJson = fetchIndeedJobDetailJson(indeedJobUrl)
     jobTitle = "title"
     companyName = "cmp"
@@ -15,7 +17,8 @@ def turnIndeedJobIntoJobOject(indeedJobUrl):
     status = "not applied"
     jobUrl = indeedJobUrl
     recruiterEmail = "recruiter@gmail.com"
-    job = Job(jobTitle, companyName, datePublished, status, jobUrl, recruiterEmail)
+    #job = Job(jobTitle, companyName, datePublished, status, jobUrl, recruiterEmail)
+    job = "dummy data"
     return job
 
 
@@ -95,4 +98,3 @@ def fillJsonWithCorrectTags(jobDetailJson,soup):
     return jobDetailJson
 
 url = "https://fr.indeed.com/voir-emploi?q=R&D+Vision&t=D%C3%A9veloppeurs(ses)+informatique&jk=3fc9219d69b065f4"
-print(turnIndeedJobIntoJobOject(url).status)
