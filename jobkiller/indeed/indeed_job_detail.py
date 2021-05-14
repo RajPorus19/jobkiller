@@ -3,8 +3,9 @@ import requests
 import json
 from lxml import html
 from pprint import pprint
-import indeed_job_list
+from jobkiller.models.job import Job
 import unicodedata
+from jobkiller.indeed import indeed_job_list
 
 
 

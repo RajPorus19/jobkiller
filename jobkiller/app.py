@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QListWidget
 from PyQt5.QtGui import QIcon
-from indeed.indeed_job_list import main as IndeedJobsSearch
+from jobkiller.indeed.indeed_job_list import main as IndeedJobsSearch
 
 class App(QWidget):
 
