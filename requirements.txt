@@ -7,8 +7,6 @@ lxml==4.6.3
 PyQt5==5.15.4
 PyQt5-Qt5==5.15.2
 PyQt5-sip==12.8.1
-PySide6==6.1.0
 requests==2.25.1
-shiboken6==6.1.0
 soupsieve==2.2.1
 urllib3==1.26.4
