@@ -96,5 +96,3 @@ def fillJsonWithCorrectTags(jobDetailJson,soup):
         jobDetailJson[currentField] += info + "\n"
 
     return jobDetailJson
-
-url = "https://fr.indeed.com/voir-emploi?q=R&D+Vision&t=D%C3%A9veloppeurs(ses)+informatique&jk=3fc9219d69b065f4"
