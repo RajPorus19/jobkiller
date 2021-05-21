@@ -1,6 +1,4 @@
-#+TITLE: Readme
-
-* Jobscraper
+#+TITLE: Jobscraper
 
 For now this project only scrapes Indeed's job and turns them into a Python object.
 In the future there will be more websites that will be scraped.
