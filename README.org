@@ -2,3 +2,23 @@
 
 For now this project only scrapes Indeed's job and turns them into a Python object.
 In the future there will be more websites that will be scraped.
+
+* How to test it ?
+
+It's recommended that you run it with a virtual environment to prevent conflicts with its
+dependencies, for example you can use virtualenv (make sure you have it installed):
+
+** Installation
+```
+git clone https://github.com/RajPorus19/jobscraper
+cd jobscraper
+python -m virtualenv env
+source env/bin/activate
+pip install -r requirements.txt
+python setup.py install --user
+```
+** Running tests
+```
+source env/bin/activate
+python setup.py test
+```
