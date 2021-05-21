@@ -1,5 +1,5 @@
 import unittest
-from jobscrapper.indeed.indeed_job_detail import IndeedJobDetail
+from jobscraper.indeed.indeed_job_detail import IndeedJobDetail
 
 class IndeedJobDetailTest(unittest.TestCase):
 

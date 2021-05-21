@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
-setup(name="jobscrapper",
-      py_modules=["jobscrapper"], packages=find_packages())
+setup(name="jobscraper",
+      py_modules=["jobscraper"], packages=find_packages())
 
 packages=(
-            'jobscrapper',
-            'jobscrapper.indeed',
-            'jobscrapper.models'
+            'jobscraper',
+            'jobscraper.indeed',
+            'jobscraper.models'
         )

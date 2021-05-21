@@ -3,9 +3,9 @@ import requests
 import json
 from lxml import html
 from pprint import pprint
-from jobscrapper.models.job import Job
+from jobscraper.models.job import Job
 import unicodedata
-from jobscrapper.indeed import indeed_job_list
+from jobscraper.indeed import indeed_job_list
 
 
 
