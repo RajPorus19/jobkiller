@@ -1,17 +1,17 @@
 from bs4 import BeautifulSoup as bs4
 import requests
 import json
-from lxml import html
-from pprint import pprint
 from jobscraper.models.job import Job
 import unicodedata
-from jobscraper.indeed import indeed_job_list
 
 
 
 class IndeedJobDetail:
-    def __init__(self,url):
+    def __init__(self,id,url,company,jobtitle):
+        self.id = id
         self.url = url
+        self.company = company
+        self.jobtitle = jobtitle
         r = requests.get(self.url)
         html_bytes = r.text
         self.soup = bs4(html_bytes, 'lxml')
@@ -22,13 +22,11 @@ class IndeedJobDetail:
 
     def _turnIndeedJobIntoJobOject(self):
         jobmapJson = self._fetchIndeedJobDetailJson()
-        jobTitle = jobmapJson["jobDesc"]
-        companyName = jobmapJson["workHours"]
+        jobDesc = jobmapJson["jobDesc"]
         datePublished = "unkown"
         status = "not applied"
-        jobUrl = self.url 
-        recruiterEmail = "recruiter@gmail.com"
-        job = Job(jobTitle, companyName, datePublished, status, jobUrl, recruiterEmail)
+        recruiterEmail = "unkown"
+        job = Job(self.id ,self.jobtitle, self.company, jobDesc, datePublished, status, self.url, recruiterEmail)
         return job
 
     def _isJobFromIndeed(self):
