@@ -10,26 +10,40 @@ class Main(Gtk.Window):
 
         Gtk.Window.__init__(self,title="Jobscraper")
 
-        self.jobs = IndeedJobList("Informatique","Paris",50).get_jobs()
+        self.indeedList = IndeedJobList("Informatique","Paris",10)
+        self.jobs = self.indeedList.get_jobs()
 
-        self.box = Gtk.Box(spacing=6)
+        self.box = Gtk.Box(spacing=6,orientation="vertical")
         self.add(self.box)
 
-        self.debugButton = Gtk.Button(label="Debug")
-        self.debugButton.connect("clicked",self.print_debug)
-        self.box.pack_start(self.debugButton, True, True, 0)
-
-        self.greetings = Gtk.Label(label="Welcome to Jobscraper")
+        self.greetings = Gtk.Label()
+        self.greetings.set_markup("<b>Welcome to Jobscrapper</b>")
         self.box.pack_start(self.greetings, True, True, 0)
 
         self.listView = Gtk.ListBox()
         for job in self.jobs:
             self.listView.add(ListBoxRowWithData(job))
-        self.listView.connect("row-activated",self.print_debug)
+        self.listView.connect("row-activated",self.show_job)
         self.box.pack_start(self.listView, True, True, 0)
 
-    def print_debug(self,widget,data):
-        print(data.listViewString)
+        self.backButton = Gtk.Button.new_with_label("Go back")
+        self.backButton.connect("clicked",self.show_list)
+        self.box.pack_start(self.backButton, True, True, 0)
+
+
+    def show_job(self,widget,data):
+        self.backButton.show()
+        self.listView.hide()
+        self.jobDescLabel = Gtk.Label()
+        jobDetail = self.indeedList.getIndeedJobDetailFromJson(data.data)
+        job = jobDetail.get_job_object()
+        self.jobDescLabel.set_markup("<b>"+job.jobDesc+"</b>")
+        self.box.pack_start(self.jobDescLabel, True, True, 0)
+        self.jobDescLabel.show()
+    def show_list(self,widget):
+        self.backButton.hide()
+        self.jobDescLabel.hide()
+        self.listView.show()
 
 
 class ListBoxRowWithData(Gtk.ListBoxRow):
